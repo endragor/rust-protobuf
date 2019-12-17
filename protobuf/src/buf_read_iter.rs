@@ -294,7 +294,7 @@ impl<'ignore> BufReadIter<'ignore> {
                 return Err(ProtobufError::WireError(WireError::UnexpectedEof));
             }
 
-            let r = bytes.slice(self.pos_within_buf, end);
+            let r = bytes.slice(self.pos_within_buf..end);
             self.pos_within_buf += len;
             Ok(r)
         } else {
@@ -308,7 +308,7 @@ impl<'ignore> BufReadIter<'ignore> {
                 let mut r = BytesMut::with_capacity(len);
                 unsafe {
                     let buf = &mut r.bytes_mut()[..len];
-                    self.read_exact(buf)?;
+                    self.read_exact(&mut *(buf as *mut [mem::MaybeUninit<u8>] as *mut [u8]))?;
                 }
                 unsafe {
                     r.advance_mut(len);

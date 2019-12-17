@@ -34,8 +34,8 @@ impl Chars {
     }
 }
 
-impl<'a> From<&'a str> for Chars {
-    fn from(src: &'a str) -> Chars {
+impl From<&'static str> for Chars {
+    fn from(src: &'static str) -> Chars {
         Chars(Bytes::from(src))
     }
 }
